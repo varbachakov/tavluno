@@ -1,0 +1,41 @@
+# IntelliJ IDEA / WebStorm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code and editor temporary files
+.vscode/
+.history/
+*.swp
+*.swo
+*~
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Tool caches
+.cache/
+.parcel-cache/
+.vite/
+.eslintcache
+.stylelintcache
+
+# Local environment settings; keep examples in Git
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini

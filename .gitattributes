@@ -1,0 +1,23 @@
+# Normalize text files to LF across operating systems.
+* text=auto eol=lf
+
+# Windows command scripts use CRLF in the working tree.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# SVG is text and should remain readable in diffs.
+*.svg text
+
+# Images, fonts and documents are binary assets.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.pdf binary

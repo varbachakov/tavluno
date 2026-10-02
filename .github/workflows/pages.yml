@@ -1,0 +1,83 @@
+name: Check and deploy Tavluno
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Check catalog and prepare site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Check links and prepare static files
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import shutil
+
+          class Catalog(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.links = set()
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if tag == "a" and "work-card" in attrs.get("class", "").split():
+                      self.links.add(attrs.get("href", ""))
+
+          source = Path(".")
+          html = (source / "index.html").read_text(encoding="utf-8")
+          if not html.lstrip().lower().startswith("<!doctype html>"):
+              raise SystemExit("The home page must be an HTML document.")
+          catalog = Catalog()
+          catalog.feed(html)
+          folders = sorted(path.parent for path in source.glob("*/index.html")
+                           if not path.parent.name.startswith((".", "_")))
+          expected = {f"./{folder.name}/" for folder in folders}
+          if not folders or catalog.links != expected:
+              raise SystemExit(f"Catalog links do not match participant folders. "
+                               f"Missing: {expected - catalog.links}; extra: {catalog.links - expected}")
+          destination = source / "_site"
+          destination.mkdir(exist_ok=True)
+          shutil.copy2(source / "index.html", destination / "index.html")
+          for folder in folders:
+              shutil.copytree(folder, destination / folder.name, dirs_exist_ok=True)
+          print(f"Catalog checked. Prepared {len(folders)} participant folders.")
+          PY
+      - name: Upload site
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    name: Publish to GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy site
+        id: deployment
+        uses: actions/deploy-pages@v4

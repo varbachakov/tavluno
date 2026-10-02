@@ -1,0 +1,97 @@
+/* 1. Сброс отступов (обязательно) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif; /* Шрифт, который вы подключили */
+    background-color: #FFFFFF; /* Белый фон для всей страницы */
+}
+
+/* 2. Сама шапка (растягиваем на всю ширину) */
+.header {
+    width: 100%;
+    background-color: #1B2A4A; /* Темно-синий цвет из макета */
+}
+
+/* 3. Контейнер внутри шапки (ограничивает контент по центру) */
+.header-container {
+    max-width: 1920px; /* Ширина макета */
+    margin: 0 auto; /* Центрирование */
+    padding: 20px 60px; /* Отступы по бокам и сверху/снизу */
+    display: flex; /* Включаем Flexbox */
+    justify-content: space-between; /* Распределяем: лево, центр, право */
+    align-items: center; /* Выравниваем по вертикали по центру */
+}
+
+/* 4. Логотип */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Расстояние между иконкой и текстом */
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* Стили для самой картинки логотипа */
+.logo img {
+    height: 32px; /* Высота иконки. Если надо больше/меньше, поменяйте */
+    width: auto;  /* Ширина подстроится автоматически */
+}
+
+/* 5. Навигация (ссылки по центру) */
+.nav {
+    display: flex;
+    gap: 32px; /* Расстояние между ссылками */
+}
+
+.nav a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Расстояние между текстом и стрелочкой */
+}
+
+.arrow {
+    font-size: 14px;
+    opacity: 0.7; /* Стрелочка чуть прозрачнее */
+}
+
+/* 6. Кнопки справа */
+.auth-buttons {
+    display: flex;
+    gap: 16px; /* Расстояние между кнопками */
+}
+
+/* Общие стили для кнопок */
+.btn-login, .btn-free {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Желтая кнопка "Войти" */
+.btn-login {
+    background-color: #FDE272; /* Цвет из макета */
+    color: #1B2A4A;
+}
+
+/* Синяя кнопка "Tavluno бесплатно" */
+.btn-free {
+    background-color: #4F7DF3; /* Цвет из макета */
+    color: #FFFFFF;
+}
